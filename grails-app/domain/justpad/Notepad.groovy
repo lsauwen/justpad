@@ -7,4 +7,8 @@ class Notepad {
     static constraints = {
     	conteudo nullable:true
     }
+
+    static mapping = {
+    	conteudo sqlType: 'clob'
+    }
 }

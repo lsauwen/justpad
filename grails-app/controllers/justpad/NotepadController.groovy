@@ -27,17 +27,6 @@ class NotepadController {
 
     @Transactional
     def save(Notepad notepad) {
-/*        if (notepad == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (notepad.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond notepad.errors, view:'create'
-            return
-        }*/
 
         notepad.save flush:true
 
@@ -48,8 +37,6 @@ class NotepadController {
     }
 
     def edit(Notepad notepad) {
-        println "************************************"
-        println params
         def notepadInstance = Notepad.findByChave(params.chave)
 
         if(notepadInstance){
@@ -60,60 +47,6 @@ class NotepadController {
 
     }
 
-/*    @Transactional
-    def update(Notepad notepad) {
-        if (notepad == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        if (notepad.hasErrors()) {
-            transactionStatus.setRollbackOnly()
-            respond notepad.errors, view:'edit'
-            return
-        }
-
-        notepad.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'notepad.label', default: 'Notepad'), notepad.id])
-                redirect notepad
-            }
-            '*'{ respond notepad, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(Notepad notepad) {
-
-        if (notepad == null) {
-            transactionStatus.setRollbackOnly()
-            notFound()
-            return
-        }
-
-        notepad.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'notepad.label', default: 'Notepad'), notepad.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'notepad.label', default: 'Notepad'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
-        }
-    }*/
 
     @MessageMapping("/hello")
     @SendTo("/topic/hello")

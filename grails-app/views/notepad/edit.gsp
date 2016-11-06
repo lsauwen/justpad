@@ -27,6 +27,12 @@
                 });
             });
         </script> 
+        <style type="text/css">
+        .txtArea {
+            width: 100%;
+            height: 100%;
+        }
+        </style>
     </head>
     <body>
         <a href="#edit-notepad" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
@@ -43,17 +49,11 @@
             </g:hasErrors>
             <g:form resource="${this.notepad}" method="PUT">
                 <g:hiddenField name="version" value="${this.notepad?.version}" />
-                <g:textField name="id" value="${this.notepad?.id}" />
                 <fieldset class="form">
 
-                    <g:textField name="conteudo" value="${this.notepad?.conteudo}" id="conteudo"/>
-                </fieldset>
-                <fieldset class="buttons">
-                    <input class="save" type="submit" value="${message(code: 'default.button.update.label', default: 'Update')}" />
+                    <g:textArea name="conteudo" value="${this.notepad?.conteudo}" id="conteudo" rows="18" class="txtArea"/>
                 </fieldset>
             </g:form>
         </div>
-        <button id="helloButton">hello</button>
-        <div id="helloDiv"></div>
     </body>
 </html>
