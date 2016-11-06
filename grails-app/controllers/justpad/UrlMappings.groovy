@@ -2,8 +2,10 @@ package justpad
 
 class UrlMappings {
 
+    static excludes = ["/stomp/**"]
+
     static mappings = {
-        "/$chave"(controller:"notepad", action:"edit")
+        "/$chave**"(controller:"notepad", action:"edit")
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here
