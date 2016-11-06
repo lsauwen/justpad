@@ -2,6 +2,7 @@ package justpad
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import grails.converters.JSON
 
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.SendTo
@@ -59,7 +60,7 @@ class NotepadController {
 
     }
 
-    @Transactional
+/*    @Transactional
     def update(Notepad notepad) {
         if (notepad == null) {
             transactionStatus.setRollbackOnly()
@@ -112,11 +113,19 @@ class NotepadController {
             }
             '*'{ render status: NOT_FOUND }
         }
-    }
+    }*/
 
     @MessageMapping("/hello")
     @SendTo("/topic/hello")
     protected String hello(String world) {
-        return "hello from controller, ${world}!"
+        // return "hello from controller, ${world}!"
+        def objJson = JSON.parse(world)
+        Notepad.withTransaction{
+            def notepad = Notepad.findByChave(objJson.chave)
+            notepad.conteudo = objJson.conteudo
+            notepad.save(flush:true)
+        }
+        println objJson.chave
+        return objJson.conteudo
     }
 }

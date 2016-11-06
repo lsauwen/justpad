@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main" />
+        <meta name="layout" content="notepad" />
         <g:set var="entityName" value="${message(code: 'notepad.label', default: 'Notepad')}" />
         <title><g:message code="default.edit.label" args="[entityName]" /></title>
 
@@ -15,27 +15,22 @@
 
                 client.connect({}, function() {
                     client.subscribe("/topic/hello", function(message) {
-                        $("#helloDiv").append(message.body);
+                        $("#conteudo").val(message.body);
                     });
                 });
 
-                $("#helloButton").click(function() {
-                    client.send("/app/hello", {}, JSON.stringify("world"));
+                $("#conteudo").keyup(function() {
+                    var valor = $("#conteudo").val();
+                    client.send("/app/hello", {}, JSON.stringify({
+                        'chave': '<%=params.chave%>',
+                        'conteudo': $("#conteudo").val()}));
                 });
             });
         </script> 
     </head>
     <body>
         <a href="#edit-notepad" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-                <li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-                <li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-            </ul>
-        </div>
         <div id="edit-notepad" class="content scaffold-edit" role="main">
-            <h1><g:message code="default.edit.label" args="[entityName]" /></h1>
             <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
             </g:if>
