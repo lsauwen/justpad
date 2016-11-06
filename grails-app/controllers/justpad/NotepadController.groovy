@@ -30,10 +30,7 @@ class NotepadController {
 
         notepad.save flush:true
 
-        println "*****************************"
-        println "CHAVE >>> ${notepad.chave}"
-        // redirect action:"edit", params: [chave:notepad.chave], encoding: 'UTF-8'
-        redirect url:"http://localhost:8080/${notepad.chave}"
+        redirect action:"edit", params: [chave:notepad.chave], encoding: 'UTF-8'
     }
 
     def edit(Notepad notepad) {
@@ -48,9 +45,9 @@ class NotepadController {
     }
 
 
-    @MessageMapping("/hello")
-    @SendTo("/topic/hello")
-    protected String hello(String world) {
+    @MessageMapping("/updateContent")
+    @SendTo("/topic/updateContent")
+    protected String updateContent(String world) {
         // return "hello from controller, ${world}!"
         def objJson = JSON.parse(world)
         Notepad.withTransaction{
@@ -58,7 +55,6 @@ class NotepadController {
             notepad.conteudo = objJson.conteudo
             notepad.save(flush:true)
         }
-        println objJson.chave
         return objJson.conteudo
     }
 }

@@ -14,14 +14,14 @@
                 var client = Stomp.over(socket);
 
                 client.connect({}, function() {
-                    client.subscribe("/topic/hello", function(message) {
+                    client.subscribe("/topic/updateContent", function(message) {
                         $("#conteudo").val(message.body);
                     });
                 });
 
                 $("#conteudo").keyup(function() {
                     var valor = $("#conteudo").val();
-                    client.send("/app/hello", {}, JSON.stringify({
+                    client.send("/app/updateContent", {}, JSON.stringify({
                         'chave': '<%=params.chave%>',
                         'conteudo': $("#conteudo").val()}));
                 });
