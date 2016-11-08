@@ -9,6 +9,15 @@
         <asset:javascript src="spring-websocket" />
 
         <script type="text/javascript">
+
+            var delay = (function(){
+              var timer = 0;
+              return function(callback, ms){
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+              };
+            })();
+
             $(function() { 
                 var socket = new SockJS("${createLink(uri: '/stomp')}");
                 var client = Stomp.over(socket);
@@ -20,10 +29,12 @@
                 });
 
                 $("#conteudo").keyup(function() {
-                    var valor = $("#conteudo").val();
-                    client.send("/app/updateContent", {}, JSON.stringify({
-                        'chave': '<%=params.chave%>',
-                        'conteudo': $("#conteudo").val()}));
+                    delay(function(){
+                        var valor = $("#conteudo").val();
+                        client.send("/app/updateContent", {}, JSON.stringify({
+                            'chave': '<%=params.chave%>',
+                            'conteudo': $("#conteudo").val()}));
+                    }, 200 );
                 });
             });
         </script> 
