@@ -3,7 +3,7 @@
     <head>
         <meta name="layout" content="notepad" />
         <g:set var="entityName" value="${message(code: 'notepad.label', default: 'Notepad')}" />
-        <title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <title>Justpad</title>
 
         <asset:javascript src="application" />
         <asset:javascript src="spring-websocket" />
@@ -28,13 +28,13 @@
                     });
                 });
 
-                $("#conteudo").keyup(function() {
+                $("#conteudo").on('keyup paste',function() {
                     delay(function(){
                         var valor = $("#conteudo").val();
                         client.send("/app/updateContent", {}, JSON.stringify({
                             'chave': '<%=params.chave%>',
                             'conteudo': $("#conteudo").val()}));
-                    }, 200 );
+                    }, 400 );
                 });
             });
         </script> 
@@ -42,6 +42,8 @@
         .txtArea {
             width: 100%;
             height: 100%;
+            border: 1px solid red;
+            box-sizing: border-box;
         }
         </style>
     </head>
