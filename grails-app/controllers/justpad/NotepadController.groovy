@@ -12,15 +12,6 @@ class NotepadController {
 
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Notepad.list(params), model:[notepadCount: Notepad.count()]
-    }
-
-    def show(Notepad notepad) {
-        respond notepad
-    }
-
     def create() {
         respond new Notepad(params)
     }
@@ -47,13 +38,12 @@ class NotepadController {
 
     @MessageMapping("/updateContent")
     @SendTo("/topic/updateContent")
-    protected String updateContent(String world) {
-        // return "hello from controller, ${world}!"
+    protected synchronized String updateContent(String world) {
         def objJson = JSON.parse(world)
         Notepad.withTransaction{
             def notepad = Notepad.findByChave(objJson.chave)
             notepad.conteudo = objJson.conteudo
-            notepad.save(flush:true)
+            notepad.merge(flush:true)
         }
         return objJson.conteudo
     }
