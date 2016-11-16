@@ -34,7 +34,7 @@
                         client.send("/app/updateContent", {}, JSON.stringify({
                             'chave': '<%=params.chave%>',
                             'conteudo': $("#conteudo").val()}));
-                    }, 400 );
+                    }, 2000 );
                 });
             });
         </script> 
@@ -42,7 +42,7 @@
         .txtArea {
             width: 100%;
             height: 100%;
-            border: 1px solid red;
+            border: 1px solid;
             box-sizing: border-box;
         }
         </style>

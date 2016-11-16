@@ -40,11 +40,12 @@ class NotepadController {
     @SendTo("/topic/updateContent")
     protected synchronized String updateContent(String world) {
         def objJson = JSON.parse(world)
+        def notepad = null
         Notepad.withTransaction{
-            def notepad = Notepad.findByChave(objJson.chave)
+            notepad = Notepad.findByChave(objJson.chave)
             notepad.conteudo = objJson.conteudo
             notepad.merge(flush:true)
         }
-        return objJson.conteudo
+        return notepad.conteudo
     }
 }
