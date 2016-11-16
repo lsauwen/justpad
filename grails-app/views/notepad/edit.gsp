@@ -21,20 +21,26 @@
             $(function() { 
                 var socket = new SockJS("${createLink(uri: '/stomp')}");
                 var client = Stomp.over(socket);
+                var subscription = null;
 
                 client.connect({}, function() {
-                    client.subscribe("/topic/updateContent", function(message) {
+                    subscription = client.subscribe("/topic/updateContent", function(message) {
                         $("#conteudo").val(message.body);
                     });
                 });
 
                 $("#conteudo").on('keyup paste',function() {
+                    subscription.unsubscribe();
+                    var valor = $("#conteudo").val();
+                    client.send("/app/updateContent", {}, JSON.stringify({
+                        'chave': '<%=params.chave%>',
+                        'conteudo': $("#conteudo").val()}));
+
                     delay(function(){
-                        var valor = $("#conteudo").val();
-                        client.send("/app/updateContent", {}, JSON.stringify({
-                            'chave': '<%=params.chave%>',
-                            'conteudo': $("#conteudo").val()}));
-                    }, 2000 );
+                        subscription = client.subscribe("/topic/updateContent", function(message) {
+                            $("#conteudo").val(message.body);
+                        });
+                    }, 500);
                 });
             });
         </script> 
